@@ -1,0 +1,17 @@
+FROM python:3.10.16
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+RUN pip3 install --no-cache-dir \
+pandas numpy matplotlib seaborn scikit-learn jupyter notebook jupyterlab
+
+RUN pip3 install --no-cache-dir \
+torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+RUN pip3 install --no-cache-dir \
+keras fastai tensorboard
+
+EXPOSE 8888
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
