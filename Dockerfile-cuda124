@@ -22,7 +22,7 @@ keras tensorboard \
 cupy-cuda12x \
 fastai 
 
-RUN pip install \
+RUN pip3 install \
     --extra-index-url=https://pypi.nvidia.com \
     "cudf-cu12==25.4.*" "dask-cudf-cu12==25.4.*" "cuml-cu12==25.4.*" \
     "cugraph-cu12==25.4.*" "nx-cugraph-cu12==25.4.*" "cuspatial-cu12==25.4.*" \
