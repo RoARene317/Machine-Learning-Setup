@@ -1,0 +1,39 @@
+FROM nvidia/cuda:12.6.3-cudnn-devel-ubuntu22.04
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+RUN apt-get update && apt-get install --no-install-recommends -y  \
+git curl wget 
+
+RUN apt-get install build-essential && rm -rf /var/lib/apt/lists/*
+
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-x86_64.sh -O ~/miniconda.sh && \
+	bash ~/miniconda.sh -b -p /opt/conda && \
+	rm ~/miniconda.sh
+
+ENV PATH=/opt/conda/bin:$PATH
+
+RUN pip3 install --no-cache-dir \
+pandas numpy matplotlib seaborn scikit-learn jupyter notebook jupyterlab \
+cupy-cuda12x
+
+RUN pip3 install --no-cache-dir \
+torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+
+RUN pip3 install --no-cache-dir \
+keras tensorboard fastai
+
+RUN pip3 install \
+    --extra-index-url=https://pypi.nvidia.com \
+    "cudf-cu12==25.4.*" "dask-cudf-cu12==25.4.*" "cuml-cu12==25.4.*" \
+    "cugraph-cu12==25.4.*" "nx-cugraph-cu12==25.4.*" "cuspatial-cu12==25.4.*" \
+    "cuproj-cu12==25.4.*" "cuxfilter-cu12==25.4.*" "cucim-cu12==25.4.*" \
+    "pylibraft-cu12==25.4.*" "raft-dask-cu12==25.4.*" "cuvs-cu12==25.4.*" \
+    "nx-cugraph-cu12==25.4.*"
+
+
+EXPOSE 8888
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
